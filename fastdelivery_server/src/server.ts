@@ -4,6 +4,7 @@ import { connectPostgreDB } from "./config/postgreDB";
 import { connectMongoDB } from "./config/mongoDB";
 import authRoutes from "./routes/authRoutes";
 import orderRoutes from "./routes/orderRoutes"
+import clientRoutes from "./routes/clientRouter"
 
 // Conectar a bases de datos
 const initDBs = async () => {
@@ -25,5 +26,6 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/client", clientRoutes);
 
 export default app;

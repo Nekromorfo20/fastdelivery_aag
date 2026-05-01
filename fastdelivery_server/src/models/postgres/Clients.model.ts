@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, Default, PrimaryKey, IsEmail, AllowNull, HasMany } from "sequelize-typescript"
+import { Table, Column, Model, DataType, Default, IsUUID, PrimaryKey, IsEmail, AllowNull, HasMany } from "sequelize-typescript"
 import { Order } from "./Orders.model";
 
 @Table({
@@ -6,6 +6,7 @@ import { Order } from "./Orders.model";
 })
 
 class Client extends Model {
+    @IsUUID(4)
     @PrimaryKey
     @Default(DataType.UUIDV4)
     @Column(DataType.UUID)

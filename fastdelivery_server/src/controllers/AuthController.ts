@@ -74,4 +74,21 @@ export class AuthController {
             res.status(500).json({ error: '¡Ocurrio un error!' });
         }
     }
+
+    static updateProfile = async (req : Request, res : Response) => {
+        try {
+            const { name, email } = req.body
+
+            const user = await User.findByPk(req.user.id);
+
+            await user.update({
+                name,
+                email
+            });
+
+            res.status(200).send("!Datos del usuario actualizados correctamente!");
+        } catch (error) {
+            res.status(500).json({ error: '¡Ocurrio un error!' });
+        }
+    }
 }

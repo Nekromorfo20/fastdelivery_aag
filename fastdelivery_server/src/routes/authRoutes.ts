@@ -2,40 +2,34 @@ import { Router } from "express";
 import { body } from "express-validator"
 import { AuthController } from "../controllers/AuthController";
 import { handleInputErrors } from "../middlewares/validation";
+import { authenticate } from "../middlewares/auth";
+import { loginValidator, signinValidator, updateProfileValidator } from "../validators/auth.validator";
 
 const router = Router();
 
 router.post("/login",
-    body('email')
-        .trim().notEmpty().isEmail().withMessage('E-mail no válido o vacio'),
-    body('password')
-        .trim().notEmpty().withMessage('El password no puede ir vacio'),
-    handleInputErrors,
+    loginValidator,
     AuthController.login
 );
 
 router.post('/signin',
-    body('name')
-        .trim().notEmpty().isString().withMessage('El nombre no puede ir vacio'),
-    body('email')
-        .trim().notEmpty().isEmail().withMessage('E-mail no válido o vacio'),
-    body('password')
-        .trim().isLength({ min: 8 }).withMessage('El password es muy corto, minimo 8 caracteres'),
-    body('passwordConfirmation').custom((value, { req }) => {
-        if (value !== req.body.password) {
-            throw new Error('Los password no son iguales');
-        }
-        return true;
-    }),
-    handleInputErrors,
+    signinValidator,
     AuthController.signin
 );
 
 router.post('/forgot-password',
     body('email')
-        .trim().notEmpty().isEmail().withMessage('E-mail no válido o vacio'),
+        .notEmpty().withMessage("El E-mail no puede ir vacio")
+        .isEmail().withMessage("El E-mail no tiene un formato válido"),
     handleInputErrors,
     AuthController.forgotPassword
+);
+
+router.use(authenticate);
+
+router.put('/update-profile',
+    updateProfileValidator,
+    AuthController.updateProfile
 );
 
 export default router;

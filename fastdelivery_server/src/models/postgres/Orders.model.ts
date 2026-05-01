@@ -14,14 +14,12 @@ export class Order extends Model {
     declare id: number;
     
     @ForeignKey(() => User)
-    @AllowNull(false)
     @Column(DataType.UUID)
-    declare userAsignedId: string;
+    declare userAssignedId: string;
 
     @ForeignKey(() => Client)
-    @AllowNull(false)
     @Column(DataType.UUID)
-    declare clienId: string;
+    declare clientId: string;
     
     @AllowNull(false)
     @Column(DataType.STRING(100))
@@ -52,11 +50,11 @@ export class Order extends Model {
     @Column(DataType.STRING(100))
     declare receiverEmail: string;
 
-    @BelongsTo(() => Client)
-    client: Client;
-
     @BelongsTo(() => User)
-    user!: User;
+    declare user: User;
+
+    @BelongsTo(() => Client)
+    declare client: Client;
 }
 
 export default Order;
