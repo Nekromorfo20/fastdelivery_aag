@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares/validation";
 
 export const createOrderValidator = [
@@ -20,6 +20,33 @@ export const createOrderValidator = [
   body("receiverAddress")
     .notEmpty()
     .withMessage("La dirección del destinatario no puede ir vacia"),
+
+  body("lat")
+    .notEmpty()
+    .withMessage("El valor latitud no puede ir vacio")
+    .isNumeric()
+    .withMessage("Valor latitud no tiene un formato válido"),
+
+  body("lng")
+    .notEmpty()
+    .withMessage("El valor longitud no puede ir vacia")
+    .isNumeric()
+    .withMessage("Valor longitud no tiene un formato válido"),
+
+  body("comments")
+    .optional(),
+
+  handleInputErrors
+];
+
+export const updateOrderValidator = [
+  param('id')
+    .notEmpty().withMessage("Id del pedido no puede ir vacio")
+    .isInt().withMessage('Id del pedido no tiene un formato válido'),
+
+  body("status")
+    .notEmpty()
+    .withMessage("El valor status no puede ir vacio"),
 
   body("lat")
     .notEmpty()

@@ -166,7 +166,7 @@ export class OrderController {
             newMovement.lat = lat,
             newMovement.lng = lng,
             newMovement.lastMovementDate = new Date();
-            newMovement.comments = comments;
+            newMovement.comments = comments?.trim() ? comments : null;
 
             await newMovement.save();
 

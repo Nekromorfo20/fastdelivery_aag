@@ -6,6 +6,7 @@ import User from "../models/postgres/User.model";
 import Client from "../models/postgres/Clients.model";
 import Order from "../models/postgres/Orders.model";
 import Movement from "../models/mongo/Movement.model";
+import { hashPassword } from "../utils/bcrypt";
 
 const seed = async () => {
   try {
@@ -23,12 +24,12 @@ const seed = async () => {
       {
         name: "Alan Aguilar",
         email: "alan@example.com",
-        password: "12345678"
+        password: await hashPassword("12345678")
       },
       {
         name: "María López",
         email: "maria@example.com",
-        password: "12345678"
+        password: await hashPassword("12345678")
       },
     ]);
 

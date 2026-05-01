@@ -77,8 +77,9 @@ A continuación se establecen los pasos para descargar el IDE **Android Studio**
 6. Ejecutar `npm run dev` para ejecutar la aplicación API REST, deje esta terminal ejecutandose en todo momento para poder probar el proyecto.
 7. Si desea finalizar la ejecución del proyecto en la terminal oprima las teclas `Ctrl + C`
 
-Puede consultar las rutas de consulta (Endpoints) en la siguiente URL de colección de Postman:
-*PENDIENTE* - agregar url-colección-postman
+**Puede consultar las rutas de consulta (Endpoints) en la siguiente URL de colección de Postman:**
+
+"https://documenter.getpostman.com/view/8167457/2sBXqKoKbj"
 
 ### Implementación de proyecto "fastdelivery_app_movil".
 1. Abra una nueva terminal (Simbolo de sistema) en la ubicación donde descargó el proyecto de GitHub (`C:/<nombre_carpeta>`).
