@@ -32,4 +32,8 @@ router.put('/update-profile',
     AuthController.updateProfile
 );
 
+router.post('/check-token',
+    AuthController.checkToken
+);
+
 export default router;

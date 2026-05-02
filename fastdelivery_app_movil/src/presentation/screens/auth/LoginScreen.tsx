@@ -5,12 +5,13 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParams } from "../../navigation/StackNagivator"
 import { useState } from "react"
 import { useAuthStore } from "../../store/auth/useAuthStore"
-// import { MyIcon } from "../../components/ui/MyIcon"
 
 interface LoginScreenProps extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 
 export const LoginScreen = ({ navigation }: LoginScreenProps) => {
+  const { height } = useWindowDimensions();
   const { login } = useAuthStore();
+
   const [isPosting, setIsPosting] = useState(false)
   const [form, setForm] = useState({
     email: '',
@@ -29,9 +30,7 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
     if (wasSuccessful) return;
 
     Alert.alert('Error', 'Usuario o contraseña incorrecto');
-  }
-
-  const { height } = useWindowDimensions();
+  }  
 
   return (
     <Layout
@@ -54,7 +53,6 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
             placeholder="Corre electronico"
             keyboardType="email-address"
             autoCapitalize="none"
-            // accessoryLeft={<MyIcon name="email-outline" />}
             style={{ marginBottom: 10 }}
             value={form.email}
             onChangeText={email => setForm({ ...form, email })}
@@ -63,7 +61,6 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
             placeholder="Contraseña"
             secureTextEntry
             autoCapitalize="none"
-            // accessoryLeft={<MyIcon name="lock-outline" />}
             style={{ marginBottom: 10 }}
             value={form.password}
             onChangeText={password => setForm({ ...form, password })}
@@ -75,7 +72,6 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
         <Layout>
           <Button
             onPress={onLogin}
-            // accessoryRight={<MyIcon name="arrow-forward-outline" white />}
             disabled={isPosting}
           >Ingresar</Button>
 

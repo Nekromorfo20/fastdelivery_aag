@@ -91,4 +91,14 @@ export class AuthController {
             res.status(500).json({ error: '¡Ocurrio un error!' });
         }
     }
+
+    static checkToken = async (req : Request, res : Response) => {
+        try {
+            const newToken = generateJWT({ id: req.user.id });
+
+            res.status(200).json({ data: newToken });
+        } catch (error) {
+            res.status(500).json({ error: '¡Ocurrio un error!' });
+        }
+    }
 }

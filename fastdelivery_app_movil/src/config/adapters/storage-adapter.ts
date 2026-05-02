@@ -14,7 +14,7 @@ export class StorageAdapter {
         try {
             await AsyncStorage.setItem(key, value)
         } catch (error) {
-            throw new Error(`Error setting item ${key} ${value}`)
+            throw new Error(`Error setting item ${key} ${value}`);
         }
     }
 

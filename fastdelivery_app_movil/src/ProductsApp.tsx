@@ -4,15 +4,19 @@ import * as eva from '@eva-design/eva';
 import { useColorScheme } from "react-native";
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { StackNavigator } from './presentation/navigation/StackNagivator';
+import { AuthProvider } from './presentation/providers/AuthProvider';
+
+const queryClient = new QueryClient()
 
 export const ProductsApp = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? eva.dark : eva.light;
-    const backgroundColor = (colorScheme === 'dark') ? theme['color-primary-800'] : theme['color-primary-100'];
+  const backgroundColor = (colorScheme === 'dark') ? theme['color-primary-800'] : theme['color-primary-100'];
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider
         {...eva} theme={theme}
@@ -31,10 +35,12 @@ export const ProductsApp = () => {
             }
           }}
         >
-          <StackNavigator />
+          <AuthProvider>
+            <StackNavigator />
+          </AuthProvider>
         </NavigationContainer>
       </ApplicationProvider>
-    </>
+    </QueryClientProvider>
   )
 }
 

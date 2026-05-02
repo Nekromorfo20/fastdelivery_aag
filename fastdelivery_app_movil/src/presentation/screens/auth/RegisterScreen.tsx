@@ -1,7 +1,6 @@
 import { Input, Layout, Text, Button } from "@ui-kitten/components"
 import { useWindowDimensions } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
-// import { MyIcon } from "../../components/ui/MyIcon"
 import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParams } from "../../navigation/StackNagivator"
 
@@ -29,21 +28,18 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
         >
           <Input
             placeholder="Nombre completo"
-            // accessoryLeft={<MyIcon name="person-outline" />}
             style={{ marginBottom: 10 }}
           />
           <Input
             placeholder="Corre electronico"
             keyboardType="email-address"
             autoCapitalize="none"
-            // accessoryLeft={<MyIcon name="mail-outline" />}
             style={{ marginBottom: 10 }}
           />
           <Input
             placeholder="Contraseña"
             secureTextEntry
             autoCapitalize="none"
-            // accessoryLeft={<MyIcon name="lock-closed-outline" />}
             style={{ marginBottom: 10 }}
           />
         </Layout>

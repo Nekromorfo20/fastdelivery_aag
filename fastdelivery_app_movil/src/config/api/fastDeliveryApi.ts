@@ -17,7 +17,7 @@ const fastDeliveryApi = axios.create({
 // Interceptor para agregar el token a las peticiones HTTP
 fastDeliveryApi.interceptors.request.use(
     async (config) => {
-        const token = await StorageAdapter.getItem('token')
+        const token = await StorageAdapter.getItem('token');
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`
         }

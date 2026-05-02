@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { IUser } from "../types";
 import User from "../models/postgres/User.model";
+import { verifyJWT } from "../utils/jwt";
 
 declare global {
     namespace Express {
@@ -21,7 +21,7 @@ export const authenticate = async (req : Request, res : Response, next : NextFun
     const [,token] = bearer.split(' ');
 
     try {
-        const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
+        const tokenDecoded = verifyJWT(token);
 
         if (typeof tokenDecoded === 'object' && tokenDecoded.id) {
             const user = await User.findOne({

@@ -18,7 +18,6 @@ import { fastDeliveryApi } from "../../config/api/fastDeliveryApi"
 //     }
 // }
 
-// POST - /api/auth/login "Servicio de autenticación de usuario"
 export const authLogin = async (email : string, password : string) => {
     email = email.toLocaleLowerCase()
     
@@ -27,7 +26,6 @@ export const authLogin = async (email : string, password : string) => {
             email,
             password
         })
-        // return returnUserToken(data)
         return data;
     } catch (error) {
         console.log(error)
@@ -35,11 +33,10 @@ export const authLogin = async (email : string, password : string) => {
     }
 }
 
-// GET - /api/auth/check-status "Revisión de token valido y refrescar token"
 export const authCheckStatus = async () => {
     try {
-        const { data } = await fastDeliveryApi.get('/auth/check-status')
-        // return returnUserToken(data)
+        const { data } = await fastDeliveryApi.post('/auth/check-token');
+        return data;
     } catch (error) {
         console.log(error)
         return null

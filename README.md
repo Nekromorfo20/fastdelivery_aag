@@ -85,7 +85,7 @@ A continuación se establecen los pasos para descargar el IDE **Android Studio**
 1. Abra una nueva terminal (Simbolo de sistema) en la ubicación donde descargó el proyecto de GitHub (`C:/<nombre_carpeta>`).
 2. Entre a la carpeta _fastdelivery_app_movil_ con el comando `cd fastdelivery_app_movil` y ejecute el comando `npm install` para instalar todas las dependencias del proyecto App Movil.
 3. Crear el archivo `.env` basado en el archivo `.env.template` del proyecto asegurese de colocarlo en la misma ubicación que el archivo `package.json`.
-4. *PENDIENTE* - Obtener la IP de su máquina y colocarlas en la .env
+4. Remplace el valor *"localhost"* del archivo `.env` por la IPv4 de su máquina, para obtener este valor puede ejecute el comando `ipconfig` en una terminal (Simbolo de sistema) de windows y copie el valor **Dirección IPv4** de la sección *Adaptador de LAN inalámbrica Wi-Fi*
 5. Abra su aplicación *"Androi dStudio"*, seleccione su dispositivo virtual y ejecutelo, espere a que termine de encenderce y desbloquerse complatemente.
 6. Regrese a su terminal y ejecute el comando `npm run android` para ejecutar la aplicación App Movil, este proceso realizará la instalación del proyecto su dispositivo, tardará unos minutos, deje esta terminal ejecutandose en todo momento para poder probar el proyecto.
 7. Al finalizar la aplicación movil se estará ejecutando en su dispositivo virtual.
