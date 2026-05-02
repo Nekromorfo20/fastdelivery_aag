@@ -71,7 +71,8 @@ export class OrderController {
         try {
             const orders = await Order.findAll({
                 where: { userAssignedId: req.user.id },
-                attributes: ["id", "trackingNumber", "status"]
+                attributes: ["id", "trackingNumber", "status"],
+                order: [['id', 'ASC']]
             });
 
             res.status(200).json({ data: orders });
@@ -108,7 +109,8 @@ export class OrderController {
             }
 
             const movements = await Movement.find({ orderId: order.id })
-                .select('_id currentStatus lastStatus lat lng lastMovementDate comments');
+                .select('_id currentStatus lastStatus lat lng lastMovementDate comments')
+                .sort({ lastMovementDate: -1 });;
 
             const orderDetail = {
                 id: order.id,
@@ -150,19 +152,24 @@ export class OrderController {
                 lng
             } = req.body;
 
-            const order = await Order.findByPk(Number(id));
-
-            if (!order) {
+            const orderExist = await Order.findByPk(Number(id));
+            if (!orderExist) {
                 return res.status(404).json({ error: "¡No se encontró la orden proporcionada!" })
             }
 
-            await order.update({ status })
+            await Order.update({
+                status
+            }, {
+                where: {
+                    id: orderExist.id
+                }
+            });
             
             const newMovement = new Movement();
 
-            newMovement.orderId = order.id;
+            newMovement.orderId = orderExist.id;
             newMovement.currentStatus = status
-            newMovement.lastStatus = order.status;
+            newMovement.lastStatus = orderExist.status;
             newMovement.lat = lat,
             newMovement.lng = lng,
             newMovement.lastMovementDate = new Date();
