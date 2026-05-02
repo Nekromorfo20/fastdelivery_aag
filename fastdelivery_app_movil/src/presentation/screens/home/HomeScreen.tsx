@@ -7,7 +7,7 @@ export const HomeScreen = () => {
       <Text>HomeScreen</Text>
 
       <Button
-        accessoryLeft={<Icon name="facebook" />}
+        // accessoryLeft={<Icon name="facebook" />}
       >
         Cerrar sesión
       </Button>

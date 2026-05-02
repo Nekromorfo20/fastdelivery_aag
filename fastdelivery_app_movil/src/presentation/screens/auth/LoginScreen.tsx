@@ -4,11 +4,13 @@ import { ScrollView } from "react-native-gesture-handler"
 import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParams } from "../../navigation/StackNagivator"
 import { useState } from "react"
+import { useAuthStore } from "../../store/auth/useAuthStore"
 // import { MyIcon } from "../../components/ui/MyIcon"
 
 interface LoginScreenProps extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 
 export const LoginScreen = ({ navigation }: LoginScreenProps) => {
+  const { login } = useAuthStore();
   const [isPosting, setIsPosting] = useState(false)
   const [form, setForm] = useState({
     email: '',
@@ -16,21 +18,20 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
   })
 
   const onLogin = async () => {
-    console.log("Haciendo Login...")
-    // if (form.email.length === 0 || form.password.length === 0) {
-    //   return
-    // }
+    if (form.email.length === 0 || form.password.length === 0) {
+      return;
+    }
 
-    // setIsPosting(true)
-    // const wasSuccessful = await login(form.email, form.password)
-    // setIsPosting(false)
+    setIsPosting(true);
+    const wasSuccessful = await login(form.email, form.password);
+    setIsPosting(false);
 
-    // if (wasSuccessful) return
+    if (wasSuccessful) return;
 
-    // Alert.alert('Error', 'Usuario o contraseña incorrecto')
+    Alert.alert('Error', 'Usuario o contraseña incorrecto');
   }
 
-  const { height } = useWindowDimensions()
+  const { height } = useWindowDimensions();
 
   return (
     <Layout

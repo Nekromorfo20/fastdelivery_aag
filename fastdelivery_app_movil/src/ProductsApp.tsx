@@ -9,6 +9,7 @@ import { StackNavigator } from './presentation/navigation/StackNagivator';
 export const ProductsApp = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? eva.dark : eva.light;
+    const backgroundColor = (colorScheme === 'dark') ? theme['color-primary-800'] : theme['color-primary-100'];
 
   return (
     <>
@@ -17,6 +18,18 @@ export const ProductsApp = () => {
         {...eva} theme={theme}
       >
         <NavigationContainer
+          theme={{
+          fonts: theme['text-basic-color'],
+          dark: colorScheme === 'dark',
+          colors: {
+              primary: theme['color-primary-500'],
+              background: backgroundColor,
+              card: theme['color-basic-100'],
+              text: theme['text-basic-color'],
+              border: theme['color-basic-800'],
+              notification: theme['color-primary-500']
+            }
+          }}
         >
           <StackNavigator />
         </NavigationContainer>
