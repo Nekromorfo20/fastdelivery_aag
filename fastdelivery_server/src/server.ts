@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import { connectPostgreDB } from "./config/postgreDB";
 import { connectMongoDB } from "./config/mongoDB";
 import authRoutes from "./routes/authRoutes";
@@ -15,6 +16,9 @@ initDBs();
 
 // Crear servidor de Express
 const app = express();
+
+// Permitir conexiones con CORS
+app.use(cors());
 
 // Loggin
 app.use(morgan('dev'));
