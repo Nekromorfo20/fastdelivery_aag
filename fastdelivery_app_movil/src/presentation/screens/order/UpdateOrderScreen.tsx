@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect,
+  useState,} from "react";
 import {
   Button,
   IndexPath,
@@ -20,6 +21,8 @@ import { statusTranslations } from "../../../locales/es";
 import { useLocationPermission } from "../../hooks/useLocationPermission";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import { updateOrder } from "../../../actions/orders/orders"
+import { Map } from "../../components/maps/Map";
+import { FullScreenLoader } from "../../components/ui/FullScreenLoader";
 
 const statusOptions = [
   "pending",
@@ -48,6 +51,38 @@ export const UpdateOrderScreen = ({
 
   const { getCurrentLocation } = useCurrentLocation();
 
+  const [coords, setCoords] = useState<{
+  lat: number;
+  lng: number;
+} | null>(null);
+const [isLoadingMap, setIsLoadingMap] =
+  useState(false);
+
+  useEffect(() => {
+    const loadLocation = async () => {
+      if (!hasLocationPermission) {
+        setCoords(null);
+        setIsLoadingMap(false);
+        return;
+    }
+
+    setIsLoadingMap(true);
+
+    try {
+      const current =
+        await getCurrentLocation();
+
+      setCoords(current);
+    } catch (error) {
+      setCoords(null);
+    } finally {
+      setIsLoadingMap(false);
+    }
+  };
+
+  loadLocation();
+}, [hasLocationPermission, getCurrentLocation]);
+
   const queryClient = useQueryClient();
 
     const mutation = useMutation({
@@ -72,7 +107,7 @@ export const UpdateOrderScreen = ({
         });
 
         navigation.goBack();
-    },
+      },
     });
 
   return (
@@ -84,20 +119,16 @@ export const UpdateOrderScreen = ({
             comments: "",
           }}
           onSubmit={async (values) => {
-            const coords =
-              hasLocationPermission
-                ? await getCurrentLocation()
-                : null;
+            const currentCoords =
+              hasLocationPermission ? coords : null;
 
             await mutation.mutateAsync({
                 orderId,
                 status: values.currentStatus,
                 comments: values.comments,
-                lat: coords?.lat ?? 0,
-                lng: coords?.lng ?? 0,
+                lat: currentCoords?.lat ?? 0,
+                lng: currentCoords?.lng ?? 0,
             });
-
-            navigation.goBack();
           }}
         >
           {({
@@ -106,14 +137,17 @@ export const UpdateOrderScreen = ({
             handleSubmit,
             setFieldValue,
           }) => {
-            const selectedIndex = new IndexPath(
-              Math.max(
-                0,
-                statusOptions.findIndex(
-                  (status) =>
-                    status === values.currentStatus
-                )
+            const selectedRow = Math.max(
+              0,
+              statusOptions.findIndex(
+                (status) =>
+                  status === values.currentStatus
               )
+            );
+
+            const selectedIndex = React.useMemo(
+              () => new IndexPath(selectedRow),
+              [selectedRow]
             );
 
             return (
@@ -127,16 +161,18 @@ export const UpdateOrderScreen = ({
                     ]
                   }
                   onSelect={(index) => {
-                    const selected =
-                      statusOptions[
-                        (index as IndexPath).row
-                      ];
+                  const selected =
+                    statusOptions[
+                      (index as IndexPath).row
+                    ];
 
+                  if (selected !== values.currentStatus) {
                     setFieldValue(
                       "currentStatus",
                       selected
                     );
-                  }}
+                  }
+                }}
                   style={{ marginBottom: 12 }}
                 >
                   {statusOptions.map((status) => (
@@ -156,7 +192,7 @@ export const UpdateOrderScreen = ({
                   category="c1"
                   style={{ marginBottom: 12 }}
                 >
-                  Se tomarán las coordenadas de tu
+                  * Se tomarán las coordenadas de tu
                   localización al cambiar el estatus
                   del pedido.
                 </Text>
@@ -166,7 +202,7 @@ export const UpdateOrderScreen = ({
                   category="c1"
                   style={{ marginBottom: 12 }}
                 >
-                  Permiso actual: {permissionStatus}
+                  Ubicación: {permissionStatus}
                 </Text>
 
                 {!hasLocationPermission && (
@@ -179,6 +215,28 @@ export const UpdateOrderScreen = ({
                   </Button>
                 )}
 
+                {hasLocationPermission && (
+                  <>
+                    {isLoadingMap ? (
+                      <Layout
+                        style={{
+                          height: 220,
+                          marginBottom: 16,
+                        }}
+                      >
+                        <FullScreenLoader />
+                      </Layout>
+                    ) : (
+                      coords && (
+                        <Map
+                          latitude={coords.lat}
+                          longitude={coords.lng}
+                        />
+                      )
+                    )}
+                  </>
+                )}
+
                 <Input
                   label="Comentarios"
                   multiline
@@ -189,11 +247,18 @@ export const UpdateOrderScreen = ({
                 />
 
                 <Button
-                    disabled={mutation.isPending}
-                    onPress={handleSubmit}
-                >
-                {mutation.isPending ? "Guardando..." : "Guardar"}
-                </Button>
+                disabled={
+                  mutation.isPending ||
+                  isLoadingMap ||
+                  (hasLocationPermission && !coords) ||
+                  values.currentStatus === initialStatus
+                }
+                onPress={handleSubmit}
+              >
+                {mutation.isPending
+                  ? "Guardando..."
+                  : "Guardar"}
+              </Button>
               </>
             );
           }}
