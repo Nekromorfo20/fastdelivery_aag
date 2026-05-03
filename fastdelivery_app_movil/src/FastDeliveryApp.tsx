@@ -7,10 +7,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { StackNavigator } from './presentation/navigation/StackNagivator';
 import { AuthProvider } from './presentation/providers/AuthProvider';
+import { LocationProvider } from "./presentation/providers/LocationProvider";
 
 const queryClient = new QueryClient()
 
-export const ProductsApp = () => {
+export const FastDeliveryApp = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? eva.dark : eva.light;
   const backgroundColor = (colorScheme === 'dark') ? theme['color-primary-800'] : theme['color-primary-100'];
@@ -36,7 +37,9 @@ export const ProductsApp = () => {
           }}
         >
           <AuthProvider>
-            <StackNavigator />
+            <LocationProvider>
+              <StackNavigator />
+            </LocationProvider>
           </AuthProvider>
         </NavigationContainer>
       </ApplicationProvider>

@@ -1,51 +1,27 @@
 import React, { useMemo, useState } from "react";
-import { Button, Layout } from "@ui-kitten/components";
+import { Layout } from "@ui-kitten/components";
 import { MainLayout } from "../../layouts/MainLayout";
 import {
-  useMutation,
   useQuery,
-  useQueryClient,
 } from "@tanstack/react-query";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParams } from "../../navigation/StackNagivator";
-import { getOrderById } from "../../../actions/orders/get-order-by-id";
+import { getOrderById } from "../../../actions/orders/orders";
 import { statusTranslations } from "../../../locales/es";
 import { OrderMovementsList } from "../../components/order/OrderMovementsList";
-import { UpdateOrderModal } from "../../components/order/UpdateOrderModal";
 import { FloatingActionButton } from "../../components/ui/FloatingActionButton";
 
-interface Props
-  extends StackScreenProps<RootStackParams, "OrderScreen"> {}
+interface Props extends StackScreenProps<RootStackParams, "OrderScreen"> {}
 
-const updateOrderMovement = async (payload: {
-  orderId: number;
-  currentStatus: string;
-  comments: string;
-}) => {
-  console.log(payload);
-  return true;
-};
-
-export const OrderScreen = ({ route }: Props) => {
+export const OrderScreen = ({
+  route,
+  navigation,
+}: Props) => {
   const { orderId } = route.params;
-  const queryClient = useQueryClient();
-
-  const [visible, setVisible] = useState(false);
 
   const { data: order, isLoading } = useQuery({
     queryKey: ["order", orderId],
     queryFn: () => getOrderById(orderId),
-  });
-
-  const mutation = useMutation({
-    mutationFn: updateOrderMovement,
-    onSuccess: () => {
-      setVisible(false);
-
-      queryClient.invalidateQueries({
-        queryKey: ["order", orderId],
-      });
-    },
   });
 
     const latestMovement = useMemo(() => {
@@ -69,21 +45,12 @@ export const OrderScreen = ({ route }: Props) => {
 
         <FloatingActionButton
           icon="✏️"
-          onPress={() => setVisible(true)}
-        />
-
-        <UpdateOrderModal
-          visible={visible}
-          initialStatus={
-            latestMovement?.currentStatus ?? order.data.status
-          }
-          isLoading={mutation.isPending}
-          onClose={() => setVisible(false)}
-          onSubmit={(values) =>
-            mutation.mutate({
+          onPress={() =>
+            navigation.navigate("UpdateOrderScreen", {
               orderId,
-              currentStatus: values.currentStatus,
-              comments: values.comments,
+              initialStatus:
+                latestMovement?.currentStatus ??
+                order.data.status,
             })
           }
         />

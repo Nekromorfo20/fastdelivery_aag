@@ -4,6 +4,7 @@ import { LoginScreen } from '../screens/auth/LoginScreen'
 import { RegisterScreen } from '../screens/auth/RegisterScreen'
 import { HomeScreen } from '../screens/home/HomeScreen'
 import { OrderScreen } from '../screens/order/OrderScreen'
+import { UpdateOrderScreen } from "../screens/order/UpdateOrderScreen";
 
 export type RootStackParams = {
     LoadingScreen : undefined
@@ -11,6 +12,10 @@ export type RootStackParams = {
     RegisterScreen : undefined
     HomeScreen : undefined
     OrderScreen : { orderId : number }
+    UpdateOrderScreen: {
+        orderId: number;
+        initialStatus: string;
+    };
 }
 
 const Stack = createStackNavigator<RootStackParams>()
@@ -36,6 +41,7 @@ export const StackNavigator = () => {
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ cardStyleInterpolator: fadeAnimation}} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ cardStyleInterpolator: fadeAnimation}} />
       <Stack.Screen name="OrderScreen" component={OrderScreen} />
+      <Stack.Screen name="UpdateOrderScreen" component={UpdateOrderScreen} />
     </Stack.Navigator>
   )
 }

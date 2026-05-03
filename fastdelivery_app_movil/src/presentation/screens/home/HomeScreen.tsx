@@ -1,4 +1,4 @@
-import { getOrders } from "../../../actions/orders/get-orders";
+import { getOrders } from "../../../actions/orders/orders";
 import { useQuery } from "@tanstack/react-query";
 import { MainLayout } from "../../layouts/MainLayout";
 import { FullScreenLoader } from "../../components/ui/FullScreenLoader";
@@ -13,8 +13,8 @@ export const HomeScreen = () => {
 
   return (
     <MainLayout
-      title="Pedidos"
-      subtitle="Lista de pedidos"
+      title="Lista de entregas"
+      subtitle="Pedidos asignados"
     >
       { isLoading ? (<FullScreenLoader />) :
         <OrderList orders={orders.data} />
