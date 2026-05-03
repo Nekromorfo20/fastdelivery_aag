@@ -71,7 +71,7 @@ export class OrderController {
         try {
             const orders = await Order.findAll({
                 where: { userAssignedId: req.user.id },
-                attributes: ["id", "trackingNumber", "status"],
+                attributes: ["id", "trackingNumber", "status", "receiverName", "receiverAddress"],
                 order: [['id', 'ASC']]
             });
 

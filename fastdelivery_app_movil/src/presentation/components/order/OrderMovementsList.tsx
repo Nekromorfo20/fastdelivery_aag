@@ -1,5 +1,9 @@
 import React from "react";
-import { Layout, List, Text } from "@ui-kitten/components";
+import {
+  Layout,
+  List,
+  Text,
+} from "@ui-kitten/components";
 import { MovementCard } from "../movement/MovimentCard";
 import { OrderInfoCard } from "./OrderInfoCard";
 
@@ -24,27 +28,59 @@ interface Props {
   };
 }
 
-export const OrderMovementsList = ({ order }: Props) => {
+export const OrderMovementsList = ({
+  order,
+}: Props) => {
   return (
     <List
-      style={{ marginBottom: 60 }}
-      contentContainerStyle={{ paddingBottom: 100 }}
+      style={{ flex: 1 }}
+      contentContainerStyle={{
+        paddingBottom: 110,
+      }}
       data={order.movements}
-      keyExtractor={(item, index) => `${item.id}-${index}`}
+      keyExtractor={(item) => item.id}
       ListHeaderComponent={
-        <>
+        <Layout>
           <OrderInfoCard order={order} />
 
-          <Layout style={{ paddingHorizontal: 8, paddingBottom: 8 }}>
-            <Text category="s1">Historial de movimientos</Text>
+          <Layout
+            style={{
+              paddingHorizontal: 16,
+              paddingTop: 18,
+              paddingBottom: 4,
+            }}
+          >
+            <Text
+              category="label"
+              appearance="hint"
+            >
+              Historial de movimientos
+            </Text>
+
+            <Text
+              category="s1"
+              style={{ marginTop: 2 }}
+            >
+              Seguimiento del pedido
+            </Text>
           </Layout>
-        </>
+        </Layout>
       }
       renderItem={({ item }) => (
-        <Layout style={{ marginVertical: 4 }}>
-          <MovementCard movement={item} />
-        </Layout>
+        <MovementCard movement={item} />
       )}
+      ListEmptyComponent={
+        <Layout
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: 8,
+          }}
+        >
+          <Text appearance="hint">
+            No hay movimientos registrados.
+          </Text>
+        </Layout>
+      }
     />
   );
 };

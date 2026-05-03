@@ -13,8 +13,8 @@ export const HomeScreen = () => {
 
   return (
     <MainLayout
-      title="Lista de entregas"
-      subtitle="Pedidos asignados"
+      title="FAST DELIVEY"
+      subtitle="Lista de entregas"
     >
       { isLoading ? (<FullScreenLoader />) :
         <OrderList orders={orders.data} />

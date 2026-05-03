@@ -1,7 +1,12 @@
 import React from "react";
-import { Card, Layout, Text } from "@ui-kitten/components";
+import {
+  Card,
+  Layout,
+  Text,
+} from "@ui-kitten/components";
 import { statusTranslations } from "../../../locales/es";
 import { formatDate } from "../../../utils/formatDate";
+import { statusStyles } from "../../../presentation/themes/order-status"
 
 export interface Movement {
   id: string;
@@ -17,79 +22,184 @@ interface Props {
   movement: Movement;
 }
 
-const Field = ({
+
+
+const StatusBadge = ({
+  status,
+}: {
+  status: string;
+}) => {
+  const current =
+    statusStyles[
+      status as keyof typeof statusStyles
+    ] ?? statusStyles.pending;
+
+  return (
+    <Layout
+      style={{
+        alignSelf: "flex-start",
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 999,
+        backgroundColor: current.background,
+      }}
+    >
+      <Text
+        category="c1"
+        style={{
+          fontWeight: "700",
+          color: current.text,
+        }}
+      >
+        {
+          statusTranslations[
+            status as keyof typeof statusTranslations
+          ]
+        }
+      </Text>
+    </Layout>
+  );
+};
+
+const InfoRow = ({
   label,
   value,
 }: {
   label: string;
-  value: React.ReactNode;
+  value: string;
 }) => (
-  <Layout
-    style={{
-      flexDirection: "row",
-      marginBottom: 4,
-      backgroundColor: "transparent",
-    }}
-  >
-    <Text category="s2">{label}: </Text>
-    <Text style={{ flex: 1 }}>{value}</Text>
+  <Layout style={{ marginBottom: 8 }}>
+    <Text
+      category="s2"
+      appearance="hint"
+    >
+      {label}
+    </Text>
+
+    <Text
+      category="p2"
+      style={{ marginTop: 2 }}
+    >
+      {value}
+    </Text>
   </Layout>
 );
 
-export const MovementCard = ({ movement }: Props) => {
+export const MovementCard = ({
+  movement,
+}: Props) => {
+  const current =
+    statusStyles[
+      movement.currentStatus as keyof typeof statusStyles
+    ] ?? statusStyles.pending;
+
   return (
     <Card
       style={{
-        marginHorizontal: 8,
-        marginVertical: 4,
+        marginHorizontal: 12,
+        marginVertical: 6,
+        borderRadius: 14,
+        overflow: "hidden",
       }}
     >
-      <Field label="Movimiento" value={movement.id} />
-
-      <Field
-        label="Estatus actual"
-        value={
-          statusTranslations[
-            movement.currentStatus as keyof typeof statusTranslations
-          ] ?? movement.currentStatus
-        }
-      />
-
-      <Field
-        label="Estatus anterior"
-        value={
-          movement.lastStatus
-            ? statusTranslations[
-                movement.lastStatus as keyof typeof statusTranslations
-              ] ?? movement.lastStatus
-            : "-----"
-        }
-      />
-
-      <Field
-        label="Fecha"
-        value={formatDate(movement.lastMovementDate)}
-      />
-
-      <Field
-        label="Coordenadas"
-        value={`${movement.lat.toFixed(6)}, ${movement.lng.toFixed(6)}`}
-      />
-
-      {!!movement.comments && (
+      <Layout
+        style={{
+          flexDirection: "row",
+        }}
+      >
         <Layout
           style={{
-            marginTop: 8,
-            backgroundColor: "transparent",
+            width: 4,
+            borderRadius: 999,
+            backgroundColor: current.accent,
+            marginRight: 12,
           }}
-        >
-          <Text category="s2" style={{ marginBottom: 4 }}>
-            Comentarios
-          </Text>
+        />
 
-          <Text appearance="hint">{movement.comments}</Text>
+        <Layout style={{ flex: 1 }}>
+          <Layout
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginBottom: 12,
+            }}
+          >
+            <Layout style={{ flex: 1 }}>
+              <Text
+                category="label"
+                appearance="hint"
+              >
+                Movimiento
+              </Text>
+
+              <Text
+                category="s1"
+                numberOfLines={1}
+                style={{ marginTop: 2 }}
+              >
+                {movement.id}
+              </Text>
+            </Layout>
+
+          </Layout>
+
+          <InfoRow
+            label="Fecha"
+            value={formatDate(
+              movement.lastMovementDate
+            )}
+          />
+
+          <InfoRow
+            label="Estatus actual"
+            value={
+              movement.currentStatus
+                ? statusTranslations[
+                    movement.currentStatus as keyof typeof statusTranslations
+                  ] ?? movement.currentStatus
+                : "-----"
+            }
+          />
+
+          <InfoRow
+            label="Estatus anterior"
+            value={
+              movement.lastStatus
+                ? statusTranslations[
+                    movement.lastStatus as keyof typeof statusTranslations
+                  ] ?? movement.lastStatus
+                : "-----"
+            }
+          />
+
+          <InfoRow
+            label="Coordenadas"
+            value={`${movement.lat.toFixed(
+              6
+            )}, ${movement.lng.toFixed(6)}`}
+          />
+
+          {!!movement.comments && (
+            <Layout style={{ flex: 1 }}>
+              <Text
+                category="label"
+                appearance="hint"
+              >
+                Comentarios
+              </Text>
+
+              <Text
+                category="s1"
+                numberOfLines={1}
+                style={{ marginTop: 2 }}
+              >
+                {movement.comments}
+              </Text>
+            </Layout>
+          )}
         </Layout>
-      )}
+      </Layout>
     </Card>
   );
 };

@@ -1,5 +1,5 @@
 import { Input, Layout, Text, Button } from "@ui-kitten/components"
-import { Alert, useWindowDimensions } from "react-native"
+import { Alert, Image, useWindowDimensions } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParams } from "../../navigation/StackNagivator"
@@ -9,8 +9,10 @@ import { useAuthStore } from "../../store/auth/useAuthStore"
 interface LoginScreenProps extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 
 export const LoginScreen = ({ navigation }: LoginScreenProps) => {
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const { login } = useAuthStore();
+  
+  const logoSize = Math.min(width * 0.38, 192);
 
   const [isPosting, setIsPosting] = useState(false)
   const [form, setForm] = useState({
@@ -40,17 +42,41 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
         style={{ marginHorizontal: 40 }}
       >
         <Layout
-          style={{ paddingTop: height * 0.35 }}
+          style={{
+            paddingTop: height * 0.18,
+            alignItems: "center",
+          }}
         >
-          <Text category="h1">Ingresar</Text>
-          <Text category="p2">Por favor, ingrese para continuar</Text>
+          <Image
+            source={require("../../../assets/iconLogin.png")}
+            style={{
+              width: logoSize,
+              height: logoSize,
+              marginBottom: 20,
+            }}
+            resizeMode="contain"
+          />
+
+          <Text category="h1" style={{ textAlign: "center" }}>
+            Inicia sesión
+          </Text>
+
+          <Text
+            category="p2"
+            style={{
+              textAlign: "center",
+              marginTop: 4,
+            }}
+          >
+            Por favor, ingrese para continuar
+          </Text>
         </Layout>
 
         <Layout
           style={{ marginTop: 20 }}
         >
           <Input
-            placeholder="Corre electronico"
+            placeholder="Correo electrónico"
             keyboardType="email-address"
             autoCapitalize="none"
             style={{ marginBottom: 10 }}
@@ -74,7 +100,6 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
             onPress={onLogin}
             disabled={isPosting}
           >Ingresar</Button>
-
         </Layout>
 
         <Layout style={{ height: 50 }} />

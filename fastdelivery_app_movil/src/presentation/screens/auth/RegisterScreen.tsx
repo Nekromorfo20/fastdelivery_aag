@@ -1,13 +1,43 @@
 import { Input, Layout, Text, Button } from "@ui-kitten/components"
-import { useWindowDimensions } from "react-native"
+import { Alert, Image, useWindowDimensions } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParams } from "../../navigation/StackNagivator"
+import { useAuthStore } from "../../store/auth/useAuthStore"
+import { useState } from "react"
 
 interface RegisterScreenProps extends StackScreenProps<RootStackParams, 'RegisterScreen'>{}
 
 export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
-  const { height } = useWindowDimensions()
+  const { height, width } = useWindowDimensions();
+  const { signin } = useAuthStore();
+
+  const logoSize = Math.min(width * 0.38, 192);
+
+  const [isPosting, setIsPosting] = useState(false)
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+  })
+
+  const onSigin = async () => {
+    if (form.name.length === 0 ||
+        form.email.length === 0 ||
+        form.password.length === 0 ||
+        form.passwordConfirmation.length === 0) {
+      return;
+    }
+
+    setIsPosting(true);
+    const wasSuccessful = await signin(form.name, form.email, form.password, form.passwordConfirmation);
+    setIsPosting(false);
+
+    if (wasSuccessful) return;
+
+    Alert.alert('Error', 'Usuario o contraseñas incorrectas');
+  }
 
   return (
     <Layout
@@ -17,10 +47,34 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
         style={{ marginHorizontal: 40 }}
       >
         <Layout
-          style={{ paddingTop: height * 0.30 }}
+          style={{
+            paddingTop: height * 0.18,
+            alignItems: "center",
+          }}
         >
-          <Text category="h1">Crear cuenta</Text>
-          <Text category="p2">Por favor, crea una cuenta para continuar</Text>
+          <Image
+            source={require("../../../assets/iconLogin.png")}
+            style={{
+              width: logoSize,
+              height: logoSize,
+              marginBottom: 20,
+            }}
+            resizeMode="contain"
+          />
+
+          <Text category="h1" style={{ textAlign: "center" }}>
+            Registrate
+          </Text>
+
+          <Text
+            category="p2"
+            style={{
+              textAlign: "center",
+              marginTop: 4,
+            }}
+          >
+            Agrege los datos para registrarse e ingresar
+          </Text>
         </Layout>
 
         <Layout
@@ -29,28 +83,43 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
           <Input
             placeholder="Nombre completo"
             style={{ marginBottom: 10 }}
+            value={form.name}
+            onChangeText={name => setForm({ ...form, name })}
           />
           <Input
             placeholder="Corre electronico"
             keyboardType="email-address"
             autoCapitalize="none"
             style={{ marginBottom: 10 }}
+            value={form.email}
+            onChangeText={email => setForm({ ...form, email })}
           />
           <Input
             placeholder="Contraseña"
             secureTextEntry
             autoCapitalize="none"
             style={{ marginBottom: 10 }}
+            value={form.password}
+            onChangeText={password => setForm({ ...form, password })}
+          />
+          <Input
+            placeholder="Repetir contraseña"
+            secureTextEntry
+            autoCapitalize="none"
+            style={{ marginBottom: 10 }}
+            value={form.passwordConfirmation}
+            onChangeText={passwordConfirmation => setForm({ ...form, passwordConfirmation })}
           />
         </Layout>
+        
 
         <Layout style={{ height: 20 }} />
 
         <Layout>
           <Button
-            onPress={() => console.log('Hola')}
-            // accessoryRight={<MyIcon name="arrow-forward-outline" white />}
-          >Crear</Button>
+            onPress={onSigin}
+            disabled={isPosting}
+          >Ingresar</Button>
         </Layout>
 
         <Layout style={{ height: 50 }} />

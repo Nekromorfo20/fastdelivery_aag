@@ -1,7 +1,12 @@
 import React from "react";
-import { Input, Layout } from "@ui-kitten/components";
+import {
+  Card,
+  Layout,
+  Text,
+} from "@ui-kitten/components";
 import { statusTranslations } from "../../../locales/es";
 import { formatDate } from "../../../utils/formatDate";
+import { statusStyles } from "../../../presentation/themes/order-status"
 
 interface Props {
   order: {
@@ -13,43 +18,123 @@ interface Props {
   };
 }
 
-export const OrderInfoCard = ({ order }: Props) => {
+const InfoRow = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) => (
+  <Layout style={{ marginBottom: 12 }}>
+    <Text
+      category="s2"
+      appearance="hint"
+    >
+      {label}
+    </Text>
+
+    <Text
+      category="p1"
+      style={{ marginTop: 2 }}
+    >
+      {value}
+    </Text>
+  </Layout>
+);
+
+const StatusBadge = ({
+  status,
+}: {
+  status: string;
+}) => {
+  const current =
+    statusStyles[
+      status as keyof typeof statusStyles
+    ] ?? statusStyles.pending;
+
   return (
-    <Layout style={{ paddingHorizontal: 8, paddingTop: 8 }}>
-      <Input
-        label="Número de rastreo"
-        value={order.trackingNumber}
-        readOnly
-        style={{ marginBottom: 8 }}
-      />
-
-      <Input
-        label="Cliente"
-        value={order.clientName}
-        readOnly
-        style={{ marginBottom: 8 }}
-      />
-
-      <Input
-        label="Usuario asignado"
-        value={order.userAssignedName}
-        readOnly
-        style={{ marginBottom: 8 }}
-      />
-
-      <Input
-        label="Estatus actual"
-        value={statusTranslations[order.status]}
-        readOnly
-        style={{ marginBottom: 8 }}
-      />
-
-      <Input
-        label="Creación del pedido"
-        value={formatDate(order.creationDate)}
-        readOnly
-        style={{ marginBottom: 16 }}
-      />
+    <Layout
+      style={{
+        alignSelf: "flex-start",
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 999,
+        backgroundColor: current.background,
+      }}
+    >
+      <Text
+        category="c1"
+        style={{
+          fontWeight: "700",
+          color: current.text,
+        }}
+      >
+        {
+          statusTranslations[
+            status as keyof typeof statusTranslations
+          ]
+        }
+      </Text>
     </Layout>
+  );
+};
+
+export const OrderInfoCard = ({
+  order,
+}: Props) => {
+  return (
+    <Card
+      style={{
+        marginHorizontal: 12,
+        marginTop: 8,
+        borderRadius: 14,
+      }}
+    >
+      <Layout>
+        <Text
+          category="label"
+          appearance="hint"
+        >
+          Número de rastreo
+        </Text>
+
+        <Text
+          category="h6"
+          style={{
+            marginTop: 2,
+            marginBottom: 16,
+          }}
+        >
+          {order.trackingNumber}
+        </Text>
+
+        <Layout style={{ marginBottom: 14 }}>
+          <Text
+            category="s2"
+            appearance="hint"
+            style={{ marginBottom: 4 }}
+          >
+            Estatus actual
+          </Text>
+
+          <StatusBadge status={order.status} />
+        </Layout>
+
+        <InfoRow
+          label="Cliente"
+          value={order.clientName}
+        />
+
+        <InfoRow
+          label="Usuario asignado"
+          value={order.userAssignedName}
+        />
+
+        <InfoRow
+          label="Creación del pedido"
+          value={formatDate(order.creationDate)}
+        />
+      </Layout>
+    </Card>
   );
 };

@@ -31,7 +31,8 @@ export const OrderList = ({ orders } : Props) => {
         renderItem={({ item }) => (
             <OrderCard order={item}/>
         )}
-        ListFooterComponent={() => <Layout style={{ height: 180 }}/>}
+        // ListFooterComponent={() => <Layout style={{ height: 180 }}/>}
+        ListEmptyComponent={() => <Text style={{ marginTop: 20,  textAlign: "center" }}>No hay ordenes para mostrar</Text>}
         refreshControl={
             <RefreshControl
                 refreshing={isRefreshin}
