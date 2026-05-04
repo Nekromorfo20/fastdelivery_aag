@@ -31,16 +31,9 @@ const statusOptions = [
   "canceled",
 ];
 
-interface Props
-  extends StackScreenProps<
-    RootStackParams,
-    "UpdateOrderScreen"
-  > {}
+interface Props extends StackScreenProps<RootStackParams, "UpdateOrderScreen"> {}
 
-export const UpdateOrderScreen = ({
-  route,
-  navigation,
-}: Props) => {
+export const UpdateOrderScreen = ({ route, navigation} : Props) => {
   const { orderId, initialStatus } = route.params;
 
   const {
@@ -51,12 +44,8 @@ export const UpdateOrderScreen = ({
 
   const { getCurrentLocation } = useCurrentLocation();
 
-  const [coords, setCoords] = useState<{
-  lat: number;
-  lng: number;
-} | null>(null);
-const [isLoadingMap, setIsLoadingMap] =
-  useState(false);
+  const [coords, setCoords] = useState<{lat: number, lng: number } | null>(null);
+  const [isLoadingMap, setIsLoadingMap] = useState(false);
 
   useEffect(() => {
     const loadLocation = async () => {
@@ -73,15 +62,15 @@ const [isLoadingMap, setIsLoadingMap] =
         await getCurrentLocation();
 
       setCoords(current);
-    } catch (error) {
-      setCoords(null);
-    } finally {
-      setIsLoadingMap(false);
-    }
-  };
+      } catch (error) {
+        setCoords(null);
+      } finally {
+        setIsLoadingMap(false);
+      }
+    };
 
-  loadLocation();
-}, [hasLocationPermission, getCurrentLocation]);
+    loadLocation();
+  }, [hasLocationPermission, getCurrentLocation]);
 
   const queryClient = useQueryClient();
 
@@ -94,16 +83,16 @@ const [isLoadingMap, setIsLoadingMap] =
         lng: number;
     }) => {
         return updateOrder(payload.orderId, {
-        status: payload.status,
-        comments: payload.comments,
-        lat: payload.lat,
-        lng: payload.lng,
+          status: payload.status,
+          comments: payload.comments,
+          lat: payload.lat,
+          lng: payload.lng,
         });
     },
 
     onSuccess: async () => {
         await queryClient.invalidateQueries({
-        queryKey: ["order", orderId],
+          queryKey: ["order", orderId],
         });
 
         navigation.goBack();
@@ -137,9 +126,7 @@ const [isLoadingMap, setIsLoadingMap] =
             handleSubmit,
             setFieldValue,
           }) => {
-            const selectedRow = Math.max(
-              0,
-              statusOptions.findIndex(
+            const selectedRow = Math.max(0, statusOptions.findIndex(
                 (status) =>
                   status === values.currentStatus
               )
@@ -255,9 +242,7 @@ const [isLoadingMap, setIsLoadingMap] =
                 }
                 onPress={handleSubmit}
               >
-                {mutation.isPending
-                  ? "Guardando..."
-                  : "Guardar"}
+                {mutation.isPending ? "Guardando..." : "Guardar"}
               </Button>
               </>
             );

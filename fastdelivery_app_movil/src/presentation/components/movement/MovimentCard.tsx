@@ -22,8 +22,6 @@ interface Props {
   movement: Movement;
 }
 
-
-
 const StatusBadge = ({
   status,
 }: {
@@ -85,13 +83,8 @@ const InfoRow = ({
   </Layout>
 );
 
-export const MovementCard = ({
-  movement,
-}: Props) => {
-  const current =
-    statusStyles[
-      movement.currentStatus as keyof typeof statusStyles
-    ] ?? statusStyles.pending;
+export const MovementCard = ({ movement }: Props) => {
+  const current = statusStyles[movement.currentStatus as keyof typeof statusStyles] ?? statusStyles.pending;
 
   return (
     <Card

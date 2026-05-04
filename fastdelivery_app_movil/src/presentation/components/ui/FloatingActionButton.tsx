@@ -1,10 +1,14 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
-import { Layout } from "@ui-kitten/components";
+import Ionicons from "@react-native-vector-icons/ionicons"
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 
 interface Props {
   onPress: () => void;
-  icon?: string;
   bottom?: number;
   right?: number;
   disabled?: boolean;
@@ -13,7 +17,7 @@ interface Props {
 
 export const FloatingActionButton = ({
   onPress,
-  icon = "✏️",
+  
   bottom = 80,
   right = 24,
   disabled = false,
@@ -25,23 +29,27 @@ export const FloatingActionButton = ({
       onPress={onPress}
       hitSlop={12}
       android_ripple={{
-        borderless: false,
-        radius: 30,
+        borderless: true,
+        radius: 32,
       }}
       style={({ pressed }) => [
         styles.container,
         {
           bottom,
           right,
-          opacity: disabled ? 0.5 : pressed ? 0.9 : 1,
+          opacity: disabled ? 0.5 : pressed ? 0.92 : 1,
           transform: [{ scale: pressed ? 0.97 : 1 }],
         },
         style,
       ]}
     >
-      <Layout style={styles.button}>
-        <Text style={styles.icon}>{icon}</Text>
-      </Layout>
+      <View style={styles.button}>
+        <Ionicons
+          name="create-outline"
+          size={24}
+          color="white"
+        />
+      </View>
     </Pressable>
   );
 };
@@ -51,22 +59,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 30,
     elevation: 8,
+    borderRadius: 29,
+    overflow: "hidden",
   },
+
   button: {
     width: 58,
     height: 58,
     borderRadius: 29,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#3366FF",
+
     shadowOpacity: 0.22,
     shadowRadius: 8,
-    backgroundColor: "blue",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-  },
-  icon: {
-    fontSize: 22,
   },
 });

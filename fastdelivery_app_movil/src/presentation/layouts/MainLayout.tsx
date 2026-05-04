@@ -1,11 +1,14 @@
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import {
   Divider,
   Layout,
   TopNavigation,
   TopNavigationAction,
-  Text,
 } from "@ui-kitten/components";
+import Ionicons from "@react-native-vector-icons/ionicons"
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../store/auth/useAuthStore";
 
@@ -13,7 +16,6 @@ interface MainLayoutProps {
   title: string;
   subtitle?: string;
   rightAction?: () => void;
-  rigthActionIcon?: string;
   children?: React.ReactNode;
 }
 
@@ -21,28 +23,29 @@ export const MainLayout = ({
   title,
   subtitle,
   rightAction,
-  rigthActionIcon,
   children,
 }: MainLayoutProps) => {
   const { top } = useSafeAreaInsets();
   const { canGoBack, goBack } = useNavigation();
   const { logout } = useAuthStore();
 
-  const renderArrow = (symbol: string) => (
-    <Text category="h6">{symbol}</Text>
-  );
+  const route = useRoute();
+
+  const shouldShowBack =
+    canGoBack() &&
+    route.name !== "HomeScreen";
 
   const renderBackAction = () => (
     <TopNavigationAction
       onPress={goBack}
-      icon={() => renderArrow("⬅️")}
+      icon={() => (<Ionicons name="arrow-back-outline" size={25} color={"gray"} />)}
     />
   );
 
   const renderRightAction = () => (
     <TopNavigationAction
       onPress={rightAction ?? logout}
-      icon={() => renderArrow(rigthActionIcon ?? "🚪")}
+      icon={() => (<Ionicons name="log-out-outline" size={25} color={"gray"} />)}
     />
   );
 
@@ -57,7 +60,11 @@ export const MainLayout = ({
         title={title}
         subtitle={subtitle}
         alignment="center"
-        accessoryLeft={canGoBack() ? renderBackAction : undefined}
+        accessoryLeft={
+          shouldShowBack
+            ? renderBackAction
+            : undefined
+        }
         accessoryRight={renderRightAction}
       />
 

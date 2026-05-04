@@ -1,4 +1,5 @@
 import { Input, Layout, Text, Button } from "@ui-kitten/components"
+import Ionicons from "@react-native-vector-icons/ionicons"
 import { Alert, Image, useWindowDimensions } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -85,6 +86,7 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
             style={{ marginBottom: 10 }}
             value={form.name}
             onChangeText={name => setForm({ ...form, name })}
+            accessoryLeft={() => (<Ionicons name="person-outline" size={20} color={"gray"} />)}
           />
           <Input
             placeholder="Corre electronico"
@@ -93,6 +95,7 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
             style={{ marginBottom: 10 }}
             value={form.email}
             onChangeText={email => setForm({ ...form, email })}
+            accessoryLeft={() => (<Ionicons name="mail-outline" size={20} color={"gray"} />)}
           />
           <Input
             placeholder="Contraseña"
@@ -101,6 +104,7 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
             style={{ marginBottom: 10 }}
             value={form.password}
             onChangeText={password => setForm({ ...form, password })}
+            accessoryLeft={() => (<Ionicons name="lock-closed-outline" size={20} color={"gray"} />)}
           />
           <Input
             placeholder="Repetir contraseña"
@@ -109,6 +113,7 @@ export const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
             style={{ marginBottom: 10 }}
             value={form.passwordConfirmation}
             onChangeText={passwordConfirmation => setForm({ ...form, passwordConfirmation })}
+            accessoryLeft={() => (<Ionicons name="lock-closed-outline" size={20} color={"gray"} />)}
           />
         </Layout>
         

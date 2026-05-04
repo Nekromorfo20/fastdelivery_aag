@@ -36,7 +36,8 @@ export const OrderScreen = ({
   return (
     <MainLayout
       title={order.data.trackingNumber}
-      subtitle={statusTranslations[order.data.status]}
+      subtitle={
+      statusTranslations[order.data.status as keyof typeof statusTranslations]}
     >
       <Layout style={{ flex: 1 }}>
         <Layout style={{ flex: 1 }}>
@@ -44,7 +45,6 @@ export const OrderScreen = ({
         </Layout>
 
         <FloatingActionButton
-          icon="✏️"
           onPress={() =>
             navigation.navigate("UpdateOrderScreen", {
               orderId,
